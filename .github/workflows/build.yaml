@@ -38,7 +38,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.20.0
         with:
           image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest  # Use the built image tag
-          severity: CRITICAL  # Specify severity levels
+          severity: HIGH,CRITICAL  # Specify severity levels
           ignore-unfixed: true  # Optional: Ignore unfixed vulnerabilities
           exit-code: '1'
         
