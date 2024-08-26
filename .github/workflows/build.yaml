@@ -35,11 +35,12 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest
 
       - name: Scan Docker image
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.20.0
         with:
           image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest  # Use the built image tag
           severity: HIGH,CRITICAL  # Specify severity levels
           ignore-unfixed: true  # Optional: Ignore unfixed vulnerabilities
+          exit-code: '1'
         
       - name: Push image
         uses: docker/build-push-action@v4
