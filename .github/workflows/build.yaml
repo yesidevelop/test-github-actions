@@ -27,12 +27,27 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       # Step 4: Build and push the Docker image
-      - name: Build and push Docker image
+      - name: Build image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: false
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest
+
+      - name: Scan Docker image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest  # Use the built image tag
+          severity: HIGH,CRITICAL  # Specify severity levels
+          ignore-unfixed: true  # Optional: Ignore unfixed vulnerabilities
+        
+      - name: Push image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest
+          load: true
 
       # Optional: Logout from Docker Hub (good practice)
       - name: Logout from Docker Hub
